@@ -23,16 +23,15 @@ be applied to a specific area that can be specified as a performance criteria
 for an application (say, number of reads fetching tweets for Twitter's BE).
 
 Performance is the system's operating characteristic when load on a system
-is changed. Performance metrics quite often are a part of your SLA with 
+is changed. Performance metrics quite often are a part of your SLA with
 customers. There are many ways to achieve system scalability.
 
 ## Maintainability
 
-Maintainability means writing code that can easily be understood, refactored 
-and upgraded by someone who is not the original author of the code. Any 
-piece of spaghetti confusing code will ultimately be understood by machines. 
-Good code should be readable and easily understood so that teams can 
-collaborate. Good code should also have the right level of abstractions, 
-clean APIs and interfaces so that new functionality can be easily built on 
+Maintainability means writing code that can easily be understood, refactored
+and upgraded by someone who is not the original author of the code. Any
+piece of spaghetti confusing code will ultimately be understood by machines.
+Good code should be readable and easily understood so that teams can
+collaborate. Good code should also have the right level of abstractions,
+clean APIs and interfaces so that new functionality can be easily built on
 top of existing codebase.
-
