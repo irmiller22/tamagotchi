@@ -66,10 +66,10 @@ goals.
 
 Principles are rules that are made in order to align with your strategic goals.
 Generally, principles tend to be constraints that are necessary to reach some
-necessary outcome. For example, Heroku's 12 Factors are mostly a list of constraints
-that define design decisions necessary for optimal usage of Heroku's application
-deployment process. By rule of thumb, it's useful to have at most 10 principles
-for your organization.
+necessary outcome. For example, Heroku's [12 Factors](https://12factor.net/)
+are mostly a list of constraints that define design decisions necessary for
+optimal usage of Heroku's application deployment process. By rule of thumb,
+it's useful to have at most 10 principles for your organization.
 
 ### Practices
 
