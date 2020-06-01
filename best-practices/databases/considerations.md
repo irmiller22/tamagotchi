@@ -10,7 +10,7 @@ A large number of computer systems are likely to maintain some sort of state, an
 
 - You're lucky 99.9999% of the time if the network is not a problem.
 - ACID has many meanings.
-- Each database has differency consistency and isolation capabilities.
+- Each database has different consistency and isolation capabilities.
 - Optimistic locking is an option when you can't hold a lock.
 - There are anomalies other than dirty reads and data loss.
 - DB doesn't always necessarily agree on ordering.
