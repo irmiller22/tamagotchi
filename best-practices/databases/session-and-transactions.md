@@ -1,14 +1,27 @@
-> Database Sessions - Best Practices
+# Database Sessions - Best Practices
 
-The purpose of this document is threefold:
+## Glossary
 
-- provide an overview of database sessions and database transactions
-- provide specifics around how sessions and transactions are managed via SQLAlchemy
-- introduce best practices for managing database sessions and transactions
+- [Introduction](#introduction)
+- [What is a database session?](#what-is-a-database-session)
+- [What is a database transaction?](#what-is-a-database-transaction)
+  - [Explain it to me like I'm 5](#explain-it-to-me-like-im-5)
+- [SQLAlchemy](#sqlalchemy)
+  - [How does SQLAlchemy leverage sessions and transactions?](#how-does-sqlalchemy-leverage-sessions-and-transactions)
+- [Best Practices](#best-practices)
+- [Resources](#resources)
+
+## Introduction
+
+The purpose of this document is to introduce three tpics:
+
+- overview of database sessions and database transactions
+- how sessions and transactions are managed via SQLAlchemy
+- best practices for managing database sessions and transactions
 
 The itention is to come away from this document with knowledge on how to manage database sessions and transactions in the backend codebase.
 
-> What is a database session?
+## What is a database session?
 
 A database session is the code construct that establishes and maintains all communication between your application and the database(s). It is intermediary in which all application logic and database abstractions (SQLAlchemy model, for example) are loaded. Most importantly, it manages database transactions initiated in the form of queries.
 
@@ -23,7 +36,7 @@ A database session lifecycle looks like the following:
 
 In short, a database session is the code-level agent responsible for orchestrating communication with the database.
 
-> What is a database transaction?
+## What is a database transaction?
 
 A database transaction is an instruction that the database session sends to the database. We understand these instructions in the form of SQL queries. A rule of thumb to remember when exactly you're in a transaction is to keep track of `BEGIN` and `COMMIT`/`ROLLBACK` SQL queries. These define the boundaries of a transaction. When we send the `BEGIN` SQL query to the database, we've entered a transaction. When we send the `COMMIT` or `ROLLBACK` SQL query to the database, we've exited a transaction.
 
@@ -33,7 +46,7 @@ There are 3 states associated with transactions: `active`, `idle in transaction`
 
 The other two states, `idle` and `idle in transaction` are important to keep in mind for debugging purposes. The `idle` state means that the database connection is not doing anything, and is waiting. This is a good point to disconnect from the database since this won't result in data loss. The `idle in transaction` state means that the connection started a transaction at some point, and is waiting for something. This can be anything like data being processed on the application side, the database loading some data before returning it to the application, or something along those lines. Whenever you have connections that are in the `idle in transaction` state, this usually means that your database connection setup warrants more investigation, because the connections are not being used efficiently.
 
-> Explain it to me like I'm 5.
+### Explain it to me like I'm 5.
 
 Imagine that you're going to a bank. You're planning to deposit 3 checks, and also withdraw some cash.
 
@@ -43,9 +56,9 @@ Once you're finished, you step out of the line, and walk out of the bank.
 
 Imagine that walking into the bank is like creating a session, and walking out of the bank is like closing a session. Waiting in the teller line for an available teller is analogous to waiting for an available connection via the connection pool. Handing over each check to be deposited and retrieving confirmations are database transactions. Finally, asking for and retrieving the cash is a separate database transactions.
 
-> SQLAlchemy
+## SQLAlchemy
 
-> How does SQLAlchemy leverage sessions and transactions?
+### How does SQLAlchemy leverage sessions and transactions?
 
 Let's step through an example of SQLAlchemy interaction with a PostgreSQL database.
 
@@ -167,7 +180,9 @@ query         | COMMIT
 
 On the `COMMIT`, the connection status has changed from `idle_in_transaction` to `idle`. This outcome the same for `ROLLBACK` as well. We can safely close out the session without any concern for data loss.
 
-> Best Practices to keep in mind
+## Best Practices
+
+The following are simple, high-level best practices to keep in mind when using database sessions.
 
 1. When using SQLAlchemy model properties for read-only purposes, `expunge` the session objects.
 
@@ -220,3 +235,8 @@ By closing a database session, you're enforcing that no database transactions wi
 3. Keep the database session lifecycle as short as possible.
 
 If you expect a database request to take more than 5 seconds, then the underlying query needs to be optimized. If you expect a database request to be long-running, such as a migration, then this should be executed in a separate context from the REST API layer.
+
+## Resources
+
+- [Introduction to SQLAlchemy, Pycon 2013](https://speakerdeck.com/zzzeek/introduction-to-sqlalchemy-pycon-2013)
+- [SQLAlchemy Connection Management](https://capnfabs.net/posts/sqlalchemy-connection-management/)
