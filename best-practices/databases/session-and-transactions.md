@@ -13,13 +13,13 @@
 
 ## Introduction
 
-The purpose of this document is to introduce three tpics:
+The purpose of this document is to introduce three topics:
 
 - overview of database sessions and database transactions
 - how sessions and transactions are managed via SQLAlchemy
 - best practices for managing database sessions and transactions
 
-The itention is to come away from this document with knowledge on how to manage database sessions and transactions in the backend codebase.
+The intention is to come away from this document with knowledge on how to manage database sessions and transactions in the backend codebase.
 
 ## What is a database session?
 
@@ -54,7 +54,7 @@ You walk into the bank, and you wait in line until a teller window opens up. You
 
 Once you're finished, you step out of the line, and walk out of the bank.
 
-Imagine that walking into the bank is like creating a session, and walking out of the bank is like closing a session. Waiting in the teller line for an available teller is analogous to waiting for an available connection via the connection pool. Handing over each check to be deposited and retrieving confirmations are database transactions. Finally, asking for and retrieving the cash is a separate database transactions.
+Imagine that walking into the bank is like creating a session, and walking out of the bank is like closing a session. Waiting in the teller line for an available teller is analogous to waiting for an available connection via the connection pool. Handing over each check to be deposited and retrieving confirmations are database transactions. Finally, asking for and retrieving the cash is a separate database transaction.
 
 ## SQLAlchemy
 
