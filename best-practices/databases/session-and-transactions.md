@@ -182,7 +182,7 @@ On the `COMMIT`, the connection status has changed from `idle_in_transaction` to
 
 ## Best Practices
 
-The following are simple, high-level best practices to keep in mind when using database sessions.
+The following are simple, high-level best practices to keep in mind when using database sessions. They are listed in no particular order.
 
 1. When using SQLAlchemy model properties for read-only purposes, `expunge` the session objects.
 
@@ -235,6 +235,10 @@ By closing a database session, you're enforcing that no database transactions wi
 3. Keep the database session lifecycle as short as possible.
 
 If you expect a database request to take more than 5 seconds, then the underlying query needs to be optimized. If you expect a database request to be long-running, such as a migration, then this should be executed in a separate context from the REST API layer.
+
+4. If order of operations is important when interacting with multiple queries, leverage `Session.flush` and `autocommit=False`.
+
+By default, `autocommit` is enabled, so the `flush` operation occurs whenever `commit` is called. However, in the default behavior, order of operations in regards to queries is not guaranteed. If you need transactions to occur in a specific order, `flush` each transaction in the specified order, and when ready to persist the changes to the database, call `commit`.
 
 ## Resources
 
