@@ -1,6 +1,6 @@
 # Intro - Getting Started with Terraform
 
-> What is Terraform?
+## What is Terraform?
 
 In engineering speak, Terraform is an Infrastructure as Code (IaC) provisioning tool. Hashicorp, the compoany that developed Terraform, describes the technology as "a tool for building, changing, and versioning infrastructure safely and efficiently.
 
@@ -10,7 +10,7 @@ Terraform is an IaC technology that automates infrastructure provisioning in the
 
 IaC in the past was accomplished via other configuration management tools such as Chef, Ansible, and Puppet.
 
-> Why Terraform?
+## Why Terraform?
 
 Terraform enjoys several advantages that make it easy to work with:
 
@@ -24,7 +24,7 @@ In relation to the competition, Terraform behaves in a declarative manner (and n
 
 Immutable infrastructure is much easier to reason about versus mutable infrastructure. There's no need to worry about leaving artifacts behind in between deployments. THe less you have to worry about the previous state of software, the better.
 
-> Hello, Terraform!
+## Hello, Terraform!
 
 This section will focus on a simple use case where we deploy an AWS EC2 virtual machine.
 
@@ -75,3 +75,67 @@ provider "aws" {
 ```
 
 At this point, we're ready to initialize Terraform via `terraform init`.
+
+Once we've successfully initialized our Terraform workspace, we're good to go ahead and start working with Terraform. We can start thinking about deploying the AWS EC2 `helloworld` instance. In order to do this, we can run `terraform apply`. This will generate an execution plan, which is a set of actions that Terraform intends to perform in order to achieve the desired state. It's important to review the execution plan. Once done reviewing the plan, you can approve the plan by entering `yes`.
+
+The stateful information about the Terraform resource is stored in a file called `terraform.tfstate`. This is a JSON file that stores the current state of our Terraform resources.
+
+The next step is to destroy the resource via the `terraform destroy` command. Once you enter the command, you'll be prompted to approve the change, which you can do so by entering `yes`.
+
+## Hello, Terraform (with a data source)!
+
+The next step is to modify the Terraform configuration in order to add a data source.
+
+```
+# main.tf
+
+provider "aws" {
+    version = 2.65.0
+    region  = "us-west-2"
+}
+
+data "aws_ami" "ubuntu" {
+    most_recent = true
+
+    filter {
+        name   = "name"
+        values = ["ubuntu/images/hvm-ssd/ubunbu-focal-20.04-amd64-server-*"]
+        owners = ["0997201009477]
+    }
+}
+
+resource "aws_instance" "helloworld" {
+    ami           = data.aws_ami.ubuntu.id
+    instance_type = "t2.micro"
+    tags          = {
+        Name = "HelloWorld
+    }
+}
+```
+
+Couple things to clear up here:
+
+- We're declaring the `aws_ami` data source with the name `ubuntu`
+- Setting a filter to select all AMI's with name matching this regex expression
+- Canonical Ubuntu AWS account ID
+
+We can run `terraform apply` and `terraform destroy` to see how they're applied in AWS.
+
+## Summary
+
+Terraform is a declarative IaC provisioning tool. It can deploy resources onto any public / private cloud.
+
+Terraform is:
+
+- provisioning tool
+- easy to use
+- free and open source
+- declarative
+- cloud agnostic
+- expressive and extensible
+
+Major configuration elements of Terraform are:
+
+- resources
+- data sources
+- providers
